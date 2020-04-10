@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+        <!DOCTYPE document SYSTEM "rml.dtd">
+
+    <document filename="harwoodgame_flyer.pdf">
+
+
+
+    <docinit>
+        <registerTTFont faceName="HelveticaNeue-Light" fileName="rml/fonts/LTe50263.ttf"/>
+        <registerTTFont faceName="HelveticaNeue-Bold" fileName="rml/fonts/LTe50261.ttf"/>
+    </docinit>
+
+    <template pageSize="(595, 842)" leftMargin="50" topMargin="30" showBoundary="0">
+            <pageTemplate id="front-page">
+            <pageGraphics>
+                <image file="rml/front-1.jpg" x="0" y="0" width="595" height="842"/>
+                <fill color="red"/>
+                <setFont name="HelveticaNeue-Light" size="12"/>
+                <drawCenteredString x="297" y="40"></drawCenteredString>
+                <fill color="red"/>
+                <setFont name="Helvetica-Bold" size="30"/>
+                <drawString x="80" y="700">Emre Ulgac heyyy</drawString>
+            </pageGraphics>
+
+             <frame id="main" x1="5%" y1="8%" width="43%" height="90%"/>
+        </pageTemplate>
+        <pageTemplate id="questions">
+            <pageGraphics>
+                <image file="rml/Bel12-1.jpg" x="0" y="0" width="595" height="1000"/>
+                <fill color="red"/>
+                <setFont name="HelveticaNeue-Light" size="12"/>
+                <drawCenteredString x="297" y="40"></drawCenteredString>
+
+                <fill color="black"/>
+                <setFont name="Helvetica-Bold" size="10"/>
+                <drawCenteredString x="297" y="30">xysinav</drawCenteredString>
+
+            </pageGraphics>
+
+         <frame id="left" x1="5%" y1="8%" width="43%" height="90%"/> <frame id="right" x1="55%" y1="8%" width="43%" height="90%"/>
+
+
+        </pageTemplate>
+
+
+
+
+    </template>
+
+    <stylesheet>
+
+        <paraStyle name="h1"
+        fontName="HelveticaNeue-Light"
+        fontSize="27"
+        leading="17"
+        spaceBefore = "30"
+        />
+
+
+            <paraStyle name="front-h1"
+        fontName="HelveticaNeue-Light"
+        fontSize="27"
+        leading="17"
+        spaceBefore="10in"
+
+
+        />
+
+
+
+
+        <paraStyle name="h2"
+        fontName="HelveticaNeue-Bold"
+        fontSize="15"
+        leading="17"
+        spaceBefore = "15"
+        />
+
+        <paraStyle name="prod_name"
+        fontName="HelveticaNeue-Light"
+        fontSize="14.5"
+        leading="14"
+        spaceBefore = "14"
+        />
+
+        <paraStyle name="prod_summary"
+        fontName="HelveticaNeue-Light"
+        fontSize="12"
+
+
+        />
+
+
+
+    <listStyle
+     name="lili"
+     rightIndent="15"
+    bulletOffsetY="-50"
+
+
+     />
+
+        <paraStyle name="prod_price"
+        fontName="HelveticaNeue-Bold"
+        fontSize="7.5"
+        leading="14"
+        spaceBefore = "4"
+        textColor="green"
+        />
+            <paraStyle name="normal" fontName="Helvetica" fontSize="10" leading="12" />
+        <paraStyle name="bullet" parent="normal" bulletFontName = "Helvetica" bulletFontSize="5"/>
+
+    </stylesheet>
+
+
+
+
+
+
+    <story>
+
+
+
+    <setNextTemplate name="front-page"  />
+
+
+        <setNextTemplate name="questions" />
+
+
+
+        <nextFrame/>
+
+
+    <ol bulletColor="red"   bulletFontName="Times-Roman" >
+
+        <li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/8.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/7.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/2.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/6.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/9.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/15.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/4.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/1.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/10.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/5.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/12.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li><li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/3.jpg" imageTopPadding="35" imageBottomPadding="75"> </imageAndFlowables></li>
+
+
+        </ol>
+
+    </story>
+
+
+    </document>
+            
