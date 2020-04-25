@@ -1,1 +1,0 @@
-This file is only here to make sure the output directory exists before running the scripts!

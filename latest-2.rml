@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
         <!DOCTYPE document SYSTEM "rml.dtd">
 
-    <document filename="harwoodgame_flyer.pdf">
-
-
-
-    <docinit>
-        <registerTTFont faceName="HelveticaNeue-Light" fileName="rml/fonts/LTe50263.ttf"/>
-        <registerTTFont faceName="HelveticaNeue-Bold" fileName="rml/fonts/LTe50261.ttf"/>
-    </docinit>
+        <docinit>
+        <registerTTFont faceName="HelveticaNeue-Light" fileName="fontlar/LTe50263.ttf"/>
+        <registerTTFont faceName="HelveticaNeue-Bold" fileName="fontlar/LTe50261.ttf"/>
+    </docinit>  
 
     <template pageSize="(595, 842)" leftMargin="50" topMargin="30" showBoundary="0">
             <pageTemplate id="front-page">

@@ -1,21 +1,29 @@
 from __future__ import print_function
-from flask_jwt import jwt_required
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+import reportlab
 from z3c.rml import reference, rml2pdf
 import glob
-import os, base64, preppy
+import os, base64
 from random import shuffle, random
 from xml.sax.saxutils import escape, unescape
-from django.template.loader import get_template
-from django.template.context import Context
 import PIL
-from django.conf import settings
-from jinja2 import Template
-settings.configure()
 from flask import Flask, request, flash, send_from_directory, send_file, render_template
-from trml2pdf import trml2pdf
+#from trml2pdf import trml2pdf
 from werkzeug.utils import redirect, secure_filename
 from flask_httpauth import HTTPBasicAuth
 
+
+
+BASE_DIR = '/Users/emreulgac/PycharmProjects/pdfgenerator'
+
+reportlab.rl_config.TTFSearchPath.append(BASE_DIR + '/fontlar')
+reportlab.rl_config.TTFSearchPath.append('/rml-files/fonts')
+reportlab.rl_config.TTFSearchPath.append(BASE_DIR + '/')
+reportlab.rl_config.TTFSearchPath.append('/fontlar')
+#reportlab.rl_config.TTFSearchPath.append('/app/static/img')
+reportlab.rl_config.TTFSearchPath.append('/img')
+reportlab.rl_config.TTFSearchPath.append(BASE_DIR + '/img')
 
 
 app = Flask(__name__)
@@ -23,7 +31,7 @@ app = Flask(__name__)
 auth = HTTPBasicAuth()
 
 DATA_DIR = 'data'
-app.config["UPLOAD_FOLDER"] = "/Users/emreulgac/PycharmProjects/xysınav/app/static/img"
+app.config["UPLOAD_FOLDER"] = BASE_DIR + "/img"
 app.config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG"]
 
 
@@ -32,14 +40,11 @@ class PDF(object):
     pass
 
 
-
 @auth.verify_password
 def verify_password(username, password):
     if username == 'xysinav' and password == 'yGCH2ta4724bqbPBjG6KM2hWP':
         return True
     return False
-
-
 
 @app.route('/' ,methods=['GET'])
 def fix():
@@ -49,117 +54,152 @@ def create_pdf(files, template,first_page_title_size="38",first_page_title_x="80
                first_page_title=" ",first_page_title_color="blue",question_top_padding="35",question_bottom_padding="55",question_numbers_offsetY="-30",
                both_side_mode="True",pages_bottom_title="xysinav",pages_bottom_title_font="Helvetica-Bold",pages_bottom_title_size="10",pages_bottom_title_color="black",
                pdf_filename="output",question_count="2"):
-    """Creates PDF as a binary stream in memory, and returns it
 
-    This can then be used to write to disk from management commands or crons,
-    or returned to caller via Django views.
-    """
-    RML_DIR = 'rml'
+    #RML_DIR = 'rml-files'
 
-    content = """<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+    content = """<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
         <!DOCTYPE document SYSTEM "rml.dtd">
 
-    <document filename="harwoodgame_flyer.pdf">
-
+    <document filename="harwoodgame_flyer.pdf"  xmlns:doc="http://namespaces.zope.org/rml/doc">
 
 
     <docinit>
-        <registerTTFont faceName="HelveticaNeue-Light" fileName="rml/fonts/LTe50263.ttf"/>
-        <registerTTFont faceName="HelveticaNeue-Bold" fileName="rml/fonts/LTe50261.ttf"/>
+ 
+      <registerTTFont faceName="Nunito-Regular" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/Nunito-Regular.ttf"/>
+      <registerTTFont faceName="Helvetica" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/Helvetica.ttf"/>
+        <registerTTFont faceName="HelveticaNeue-Light" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/LTe50263.ttf"/>
+        <registerTTFont faceName="HelveticaNeue-Bold" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/LTe50261.ttf"/>
     </docinit>
 
     <template pageSize="(595, 842)" leftMargin="50" topMargin="30" showBoundary="0">
             <pageTemplate id="front-page">
             <pageGraphics>
-                <image file="rml/front-1.jpg" x="0" y="0" width="595" height="842"/>
+                <image file="/Users/emreulgac/PycharmProjects/pdfgenerator/rml-files/front-1.jpg" x="0" y="0" width="595" height="842"/>
                 <fill color="red"/>
-                <setFont name="HelveticaNeue-Light" size="12"/>
+                <setFont name="Helvetica" size="12"/>
                 <drawCenteredString x="297" y="40"></drawCenteredString>
                 <fill color="{first_page_titlecolor}"/>
                 <setFont name="{first_page_title_font}" size="{first_page_title_size}"/>
                 <drawString x="{first_page_title_x}" y="{first_page_title_y}">{first_page_title}</drawString>
+                
             </pageGraphics>
 
              <frame id="main" x1="5%" y1="8%" width="43%" height="90%"/>
         </pageTemplate>
         <pageTemplate id="questions">
             <pageGraphics>
-                <image file="rml/Bel12-1.jpg" x="0" y="0" width="595" height="1000"/>
+    
+                
+         <image file="/Users/emreulgac/PycharmProjects/pdfgenerator/rml-files/p1.jpg" x="0" y="80" width="595" height="750" />
                 <fill color="red"/>
-                <setFont name="HelveticaNeue-Light" size="12"/>
+                <setFont name="Helvetica" size="12"/>
                 <drawCenteredString x="297" y="40"></drawCenteredString>
+                    <image file="/Users/emreulgac/PycharmProjects/pdfgenerator/rml-files/logo.jpg" x="15" y="755" width="100" height="100"/>
+            
 
-                <fill color="{pages_bottom_title_color}"/>
-                <setFont name="{pages_bottom_title_font}" size="{pages_bottom_title_size}"/>
-                <drawCenteredString x="297" y="30">{pages_bottom_title}</drawCenteredString>
+         
+<fill color= "blue" />
+<rect x="30" y = "45" width="535" height="1" round="1"  stroke="0" fill="1"  />
+                <fill color="black"/>
+                <drawString x="32" y="30">{first_page_title}</drawString>
+                
+            <fill color="black"/>
+           <drawString x="297" y="30"><pageNumber/></drawString>
+           
+             <fill color="black"/>
+           <drawString x="447" y="30">Diğer sayfaya geçiniz</drawString>
+          
+<fill color= "blue" />
+<rect x="30" y = "22" width="535" height="1" round="1" fill="1"   stroke="0" />
+
 
             </pageGraphics>
-
+            
+                 
+    
+        
          {both_side_mode}
 
+        
 
         </pageTemplate>
+        
+        
+        
+        <pageTemplate id="questions-2">
+            <pageGraphics>
+              
+             <image file="/Users/emreulgac/PycharmProjects/pdfgenerator/rml-files/p2.jpg" x="0" y="80" width="595" height="750" />
+              <fill color="red"/>
+                <setFont name="Helvetica" size="12"/>
+             <drawCenteredString x="297" y="40"></drawCenteredString>
+                <image file="/Users/emreulgac/PycharmProjects/pdfgenerator/rml-files/logo.jpg" x="15" y="755" width="100" height="100"/>
+            
+<fill color= "blue" />
+<rect x="30" y = "45" width="535" height="1" round="1"  stroke="0" fill="1"  />
+                <fill color="black"/>
+                <drawString x="32" y="30">{first_page_title}</drawString>
+                
+            <fill color="black"/>
+           <drawString x="297" y="30"><pageNumber/></drawString>
+           
+             <fill color="black"/>
+           <drawString x="447" y="30">Diğer sayfaya geçiniz</drawString>
+          
+<fill color= "blue" />
+<rect x="30" y = "22" width="535" height="1" round="1" fill="1"   stroke="0" />
 
 
+            </pageGraphics>
+            
+                 
+    
+        
+         {both_side_mode}
 
+        
 
+        </pageTemplate>
     </template>
 
     <stylesheet>
 
         <paraStyle name="h1"
-        fontName="HelveticaNeue-Light"
+        fontName="Helvetica"
         fontSize="27"
         leading="17"
         spaceBefore = "30"
         />
-
-
             <paraStyle name="front-h1"
-        fontName="HelveticaNeue-Light"
+        fontName="Helvetica"
         fontSize="27"
         leading="17"
         spaceBefore="10in"
-
-
         />
-
-
-
-
         <paraStyle name="h2"
-        fontName="HelveticaNeue-Bold"
+        fontName="Helvetica"
         fontSize="15"
         leading="17"
         spaceBefore = "15"
         />
 
         <paraStyle name="prod_name"
-        fontName="HelveticaNeue-Light"
+        fontName="Helvetica"
         fontSize="14.5"
         leading="14"
         spaceBefore = "14"
         />
 
         <paraStyle name="prod_summary"
-        fontName="HelveticaNeue-Light"
+        fontName="Helvetica"
         fontSize="12"
-
-
         />
 
-
-
-    <listStyle
-     name="lili"
-     rightIndent="15"
-    bulletOffsetY="{question_numbers_offsetY}"
-
-
-     />
+     <listStyle name="blah" spaceAfter="10" bulletType="A" spaceBefore="23" />
+	<listStyle name="square" spaceAfter="10" bulletType="bullet" spaceBefore="23" bulletColor="red" start="square"/>
 
         <paraStyle name="prod_price"
-        fontName="HelveticaNeue-Bold"
+        fontName="Helvetica"
         fontSize="7.5"
         leading="14"
         spaceBefore = "4"
@@ -168,79 +208,63 @@ def create_pdf(files, template,first_page_title_size="38",first_page_title_x="80
             <paraStyle name="normal" fontName="Helvetica" fontSize="10" leading="12" />
         <paraStyle name="bullet" parent="normal" bulletFontName = "Helvetica" bulletFontSize="5"/>
 
+           <listStyle
+        name="Ordered"
+        bulletFontName="Nunito"
+        bulletFontSize="13"
+        bulletFormat="%s."
+        bulletDedent="25"
+        bulletType="1"
+       bulletColor="black"
+        leftIndent="25"
+        
+             
+    bulletOffsetY="{question_numbers_offsetY}"
+        />
     </stylesheet>
 
-
-
-
-
-
     <story>
+      
+         <setNextTemplate name="front-page"  />
 
-
-
-    <setNextTemplate name="front-page"  />
-
-
-        <setNextTemplate name="questions" />
-
-
-
+     
+        <setNextTemplate name="questions-2"  />
         <nextFrame/>
 
 
-    <ol bulletColor="red"   bulletFontName="Times-Roman" >
+    
+    
+        
+    <ol style="Ordered"  >
 
        {images_last}
-
-
+ 
         </ol>
+      
 
     </story>
+    
+ 
 
 
     </document>
             """
 
-    templateName = os.path.join(RML_DIR, template)
-    template = preppy.getModule(templateName)
-    namespace = {
-        'files':files,
-        'RML_DIR': RML_DIR,
-        'IMG_DIR': 'img',
-        'first_page_title_size':first_page_title_size,
-        'first_page_title_x':first_page_title_x,
-        'first_page_title_y':first_page_title_y,
-        'first_page_title_font':first_page_title_font,
-        'first_page_title' :first_page_title,
-        'first_page_title_color':first_page_title_color,
-        'question_top_padding':question_top_padding,
-        'question_bottom_padding':question_bottom_padding,
-        'question_numbers_offsetY':question_numbers_offsetY,
-        'both_side_mode':both_side_mode,
-        'pages_bottom_title':pages_bottom_title,
-        'pages_bottom_title_font':pages_bottom_title_font,
-        'pages_bottom_title_size':pages_bottom_title_size,
-        'pages_bottom_title_color':pages_bottom_title_color,
-        'question_count':question_count
-
-        }
-
-
-
     i=0
     images_last = " "
     while i < question_count:
+        print("hallo"+files[i])
 
+        if files[i] == '.DS_Store':
+            i = i + 1
 
-        images='<li style="lili"  bulletColor="black"    bulletFontName="Helvetica"> <imageAndFlowables  imageName="app/static/img/{URL}" imageTopPadding="{question_top_padding}" imageBottomPadding="{question_bottom_padding}"> </imageAndFlowables></li>'
+        images='<li   bulletColor="black"   bulletFontName="Helvetica"> <imageAndFlowables  imageName="/Users/emreulgac/PycharmProjects/pdfgenerator/img/{URL}" imageTopPadding="{question_top_padding}" imageBottomPadding="{question_bottom_padding}"> </imageAndFlowables> </li>'
+
 
         images=images.format(URL=files[i],question_top_padding=question_top_padding,question_bottom_padding=question_bottom_padding)
         images_last=images_last + images
 
         i=i+1
-
-
     f = open("latest-2.rml", "w+")
 
     if both_side_mode == "True":
@@ -253,7 +277,7 @@ def create_pdf(files, template,first_page_title_size="38",first_page_title_x="80
                                  pages_bottom_title_font=pages_bottom_title_font,
                                  pages_bottom_title_size=pages_bottom_title_size
                                  , pages_bottom_title=pages_bottom_title,question_numbers_offsetY=question_numbers_offsetY,
-                                      both_side_mode='<frame id="left" x1="5%" y1="8%" width="43%" height="90%"/> <frame id="right" x1="55%" y1="8%" width="43%" height="90%"/>',images_last=images_last)
+                                      both_side_mode='<frame id="left" x1="3%" y1="2%" width="42%" height="90%"/> <frame id="right" x1="54%" y1="2%" width="42%" height="90%"/>',images_last=images_last)
     else:
         last_content = content.format(first_page_titlecolor=first_page_title_color,
                                  first_page_title_size=first_page_title_size,
@@ -264,14 +288,15 @@ def create_pdf(files, template,first_page_title_size="38",first_page_title_x="80
                                  pages_bottom_title_font=pages_bottom_title_font,
                                  pages_bottom_title_size=pages_bottom_title_size
                                  , pages_bottom_title=pages_bottom_title,question_numbers_offsetY=question_numbers_offsetY,
-                                 both_side_mode='<frame id="left" x1="5%" y1="8%" width="43%" height="90%"/>',images_last=images_last)
+                                 both_side_mode='<frame id="left" x1="3%" y1="2%" width="44%" height="90%"/>',images_last=images_last)
 
     f.write(last_content)
 
     f.close()
 
-    return   rml2pdf.go('latest-2.rml', pdf_filename +'.pdf')
+    print(last_content)
 
+    return   rml2pdf.go('latest-2.rml',BASE_DIR + '/output/' +pdf_filename +'.pdf')
 
 
 
@@ -290,10 +315,10 @@ def allowed_image(filename):
 
 def sort_images():
 
-    os.chdir('/Users/emreulgac/PycharmProjects/xysınav/app/static/img/')
+    os.chdir(BASE_DIR + '/img/')
     files = os.listdir(os.getcwd())
     files.sort(key=lambda f: os.stat(f).st_size, reverse=True)
-    os.chdir('/Users/emreulgac/PycharmProjects/xysınav/')
+    os.chdir('/')
 
     print(len(files))
     print(files)
@@ -302,7 +327,7 @@ def sort_images():
     new_list=[]
 
     while j <=len(files)-1:
-        print(j)
+
         if j%2 == 0:
             new_list.append(files[j])
         else:
@@ -347,9 +372,6 @@ def main():
              file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
              l = os.listdir(os.path.join(app.config['UPLOAD_FOLDER']))
 
-
-
-
     pdf = create_pdf(sort_images(), 'flyer_template.prep', first_page_title_size,first_page_title_x,
                      first_page_title_y,first_page_title_font,first_page_title,
                      first_page_title_color,question_top_padding,question_bottom_padding,question_numbers_offsetY,both_side_mode,
@@ -357,16 +379,15 @@ def main():
 
     filename = pdf_filename+'.pdf'
 
+    files2 = os.listdir(BASE_DIR +'/img/')
+
+    for file in files2:
+        if file.endswith('.jpg'):
+            os.remove(BASE_DIR + '/img/' + file)
 
 
-    files = glob.glob('/Users/emreulgac/PycharmProjects/xysınav/app/static/img/*')
-    for f in files:
-        os.remove(f)
-
-    path= '/Users/emreulgac/PycharmProjects/xysınav/'+filename
+    path= BASE_DIR + '/output/'+filename
     return send_file(path, as_attachment=True)
 
-
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
