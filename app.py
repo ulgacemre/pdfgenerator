@@ -8,10 +8,11 @@ import os, base64
 from random import shuffle, random
 from xml.sax.saxutils import escape, unescape
 import PIL
-from flask import Flask, request, flash, send_from_directory, send_file, render_template
+from flask import Flask, jsonify, request, flash, send_from_directory, send_file, render_template, make_response
 #from trml2pdf import trml2pdf
 from werkzeug.utils import redirect, secure_filename
 from flask_httpauth import HTTPBasicAuth
+from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
 
 
@@ -64,11 +65,11 @@ def create_pdf(files, template,first_page_title_size="38",first_page_title_x="80
 
 
     <docinit>
- 
-      <registerTTFont faceName="Nunito-Regular" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/Nunito-Regular.ttf"/>
-      <registerTTFont faceName="Helvetica" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/Helvetica.ttf"/>
-        <registerTTFont faceName="HelveticaNeue-Light" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/LTe50263.ttf"/>
-        <registerTTFont faceName="HelveticaNeue-Bold" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/LTe50261.ttf"/>
+       <registerTTFont faceName="Arial" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/Arial.ttf"/>
+       <registerTTFont faceName="Nunito-Regular" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/Nunito-Regular.ttf"/>
+       <registerTTFont faceName="Helvetica" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/Helvetica.ttf"/>
+       <registerTTFont faceName="HelveticaNeue-Light" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/LTe50263.ttf"/>
+       <registerTTFont faceName="HelveticaNeue-Bold" fileName="/Users/emreulgac/PycharmProjects/pdfgenerator/fontlar/LTe50261.ttf"/>
     </docinit>
 
     <template pageSize="(595, 842)" leftMargin="50" topMargin="30" showBoundary="0">
@@ -345,20 +346,43 @@ def main():
 
 
     first_page_title = request.form.get('first_page_title')
+    if first_page_title is None:
+        return make_response(jsonify(first_page_title='First page title required.'), 400)
     first_page_title_size=request.form.get('first_page_title_size')
+    if first_page_title_size is None:
+        return make_response(jsonify(first_page_title_size='First page title size required.'), 400)
     first_page_title_font = request.form.get('first_page_title_font')
+    if first_page_title_font is None:
+        return make_response(jsonify(first_page_title_font='First page title font required.'), 400)
     first_page_title_x = request.form.get('first_page_title_x')
+    if first_page_title_x is None:
+        return make_response(jsonify(first_page_title_x='First page title x coordinate required.'), 400)
     first_page_title_y = request.form.get('first_page_title_y')
+    if first_page_title_y is None:
+        return make_response(jsonify(first_page_title_y='First page title y coordinate required.'), 400)
     first_page_title_color = request.form.get('first_page_title_color')
+    if first_page_title_color is None:
+        return make_response(jsonify(first_page_title_color='First page title color required.'), 400)
     pdf_filename = request.form.get('filename')
+    if pdf_filename is None:
+        return make_response(jsonify(pdf_filename='Pdf filename required.'),400)
     question_top_padding = request.form.get('question_top_padding')
+    if question_top_padding is None:
+        return make_response(jsonify(question_top_padding='Questions top padding required.'), 400)
     question_bottom_padding=request.form.get('question_bottom_padding')
+    if question_bottom_padding is None:
+        return make_response(jsonify(question_bottom_padding='Questions bottom padding required.'), 400)
     question_numbers_offsetY=request.form.get('question_numbers_offsetY')
+    if question_numbers_offsetY is None:
+        return make_response(jsonify(question_numbers_offsetY='Questions numbers Y offset required.'), 400)
     both_side_mode=request.form.get('both_side_mode')
+    if both_side_mode is None:
+        return make_response(jsonify(both_side_mode='Both side mode required.'), 400)
     pages_bottom_title=request.form.get('pages_bottom_title')
     pages_bottom_title_font = request.form.get('pages_bottom_title_font')
     pages_bottom_title_size = request.form.get('pages_bottom_title_size')
     pages_bottom_title_color = request.form.get('pages_bottom_title_color')
+
 
 
     # check if the post request has the file part
@@ -387,6 +411,8 @@ def main():
 
 
     path= BASE_DIR + '/output/'+filename
+
+
     return send_file(path, as_attachment=True)
 
 if __name__ == "__main__":
